@@ -1,4 +1,5 @@
-CREATE DATABASE  IF NOT EXISTS `lab_management` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+DROP DATABASE IF EXISTS `lab_management`;
+CREATE DATABASE IF NOT EXISTS `lab_management` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `lab_management`;
 -- MySQL dump 10.13  Distrib 8.0.11, for Win64 (x86_64)
 --
@@ -283,13 +284,6 @@ INSERT INTO `inventory` VALUES (1071836795,'Fume Hood',597.55,'{\"Vendor_Add_Cit
 
 UNLOCK TABLES;
 
-set profiling=1; 
-select * from inventory where Equipment_Name='Centrifuge';
-show profile;
-
-SHOW VARIABLES LIKE 'performance_schema';
-
-
 --
 -- Table structure for table `lab`
 --
@@ -472,7 +466,7 @@ INSERT INTO `professor` VALUES (1349232821,'James',NULL,'Diaz',64824.1,'090','ja
 UNLOCK TABLES;
 
 
-select * from professor where First_Name='Charles';
+
 --
 -- Table structure for table `proj_taken`
 --
@@ -546,6 +540,8 @@ CREATE TABLE `staff` (
    `Lab_Name` ENUM('Anatomy Lab', 'Biochemistry Lab', 'Biology Lab', 'Botany Lab', 'Chemistry Lab', 'Computer Lab', 'Ecology Lab', 'Engineering Lab', 'Genetics Lab', 'Geology Lab', 'Microbiology Lab', 'Neuroscience Lab', 'Physics Lab', 'Psychology Lab', 'Zoology Lab') NOT NULL, 
   `Email_ID` VARCHAR(255) CHECK (Email_ID REGEXP'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
   `Contact` bigint DEFAULT NULL,
+  `img_url` VARCHAR(255) DEFAULT NULL,
+  `img_caption` VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (`Employee_ID`),
   UNIQUE KEY `Employee_ID` (`Employee_ID`),
   CONSTRAINT `staff_chk_2` CHECK (((`Contact` >= 1000000000) and (`Contact` < 10000000000))),
@@ -560,13 +556,66 @@ create index staff_name_idx on staff(First_Name);
 -- Dumping data for table `staff`
 --
 
+-- LOCK TABLES `staff` WRITE;
+-- /*!40000 ALTER TABLE `staff` DISABLE KEYS */;
+-- INSERT INTO `staff` VALUES (1090324586,'Antonio','Candice','Fritz',21076.4,'Assistant','Anatomy Lab','antoniofritz@example.com',7513498620),(1175259019,'Larry',NULL,'Clark',48988.8,'Researcher','Biochemistry Lab','larryclark@example.com',2385167904),(1357028218,'Cody',NULL,'Lopez',38466.9,'Assistant','Biology Lab','codylopez@example.com',6975814320),(1396986120,'Jessica',NULL,'Frost',71804.4,'Researcher','Botany Lab','jessicafrost@example.com',4297681053),(2252282535,'Christine','Zachary','Baker',89152.1,'Technician','Chemistry Lab','christinebaker@example.com',5196274308),(2764247410,'Alex','Michael','Bailey',99937.1,'Technician','Computer Lab','alexbailey@example.com',6739051842),(2853892818,'Stephen','Karen','Chase',69513,'Assistant','Ecology Lab','stephenchase@example.com',8156497023),(3170365953,'David',NULL,'Mcgee',21578.4,'Assistant','Engineering Lab','davidmcgee@example.com',9205361784),(3406445670,'Jamie',NULL,'Pierce',86842.4,'Researcher','Genetics Lab','jamiepierce@example.com',4287951360),(3450567856,'Philip',NULL,'Smith',31348.6,'Technician','Geology Lab','philipsmith@example.com',6921480753),(3630159773,'Linda',NULL,'Robinson',22609.8,'Researcher','Microbiology Lab','lindarobinson@example.com',5309618472),(3762979011,'Edwin','John','Howard',25057.7,'Technician','Neuroscience Lab','edwinhoward@example.com',7405829613),(3944593488,'Lori','Susan','Erickson',79620.4,'Assistant','Physics Lab','lorierickson@example.com',8129034765),(3986993428,'Wendy',NULL,'Robbins',71580.8,'Researcher','Psychology Lab','wendyrobbins@example.com',3964872051),(3988871171,'Ethan',NULL,'Velasquez',52002.9,'Researcher','Zoology Lab','ethanvelasquez@example.com',5049286137),(4282973843,'Charles',NULL,'Sullivan',71086.1,'Researcher','Anatomy Lab','charlessullivan@example.com',6804529713),(4549854248,'Shawn','Robert','Dunn',89957.3,'Assistant','Biochemistry Lab','shawndunn@example.com',3289651740),(4689717527,'Sara',NULL,'Davis',21342.6,'Assistant','Biology Lab','saradavis@example.com',7205483169),(4949907660,'Robert','Anna','Conley',33290.6,'Researcher','Botany Lab','robertconley@example.com',5184976230),(4997647942,'Justin','Peter','Anderson',96318.4,'Assistant','Chemistry Lab','justinanderson@example.com',9205481673),(5007077667,'Miguel',NULL,'Willis',74525.5,'Researcher','Computer Lab','miguelwillis@example.com',4637819205),(5152950840,'Bonnie','Shawn','Moore',21762.4,'Assistant','Ecology Lab','bonniemoore@example.com',5291876403),(5347013098,'Peter',NULL,'Fleming',59585.1,'Technician','Engineering Lab','peterfleming@example.com',6129408753),(5633355197,'Kevin','Joann','Delacruz',32613.2,'Assistant','Genetics Lab','kevindelacruz@example.com',8392075164),(5788369594,'Gregory',NULL,'Arroyo',67534.6,'Technician','Geology Lab','gregoryarroyo@example.com',9204863175),(5885455588,'Maria',NULL,'Lee',69550.2,'Technician','Microbiology Lab','marialee@example.com',7405892163),(5906677826,'Renee',NULL,'Roy',31086.6,'Assistant','Neuroscience Lab','reneeroy@example.com',4287153906),(5973489830,'Cassandra',NULL,'Rogers',95889.6,'Technician','Physics Lab','cassandrarogers@example.com',5032879156),(5996936127,'Amanda','Melinda','Pena',21838,'Researcher','Psychology Lab','amandapena@example.com',6724308519),(6310327206,'Vickie','Karen','Heath',61088.9,'Assistant','Zoology Lab','vickieheath@example.com',8392075164),(6384582630,'Ronald',NULL,'Mullins',35882.6,'Technician','Anatomy Lab','ronaldmullins@example.com',9204863175),(6534788396,'Jennifer',NULL,'Nguyen',90618,'Researcher','Biochemistry Lab','jennifernguyen@example.com',7405892163),(6678224530,'Arthur','Benjamin','Solis',72135.4,'Assistant','Biology Lab','arthursolis@example.com',4287153906),(6740036722,'Carrie','Lisa','Young',36937.2,'Assistant','Botany Lab','carrieyoung@example.com',5032879156),(6995308646,'Michael',NULL,'Alexander',38721.5,'Researcher','Chemistry Lab','michaelalexander@example.com',6724308519),(7053229337,'Daniel',NULL,'Henderson',88265.2,'Researcher','Computer Lab','danielhenderson@example.com',8392075164),(7688260504,'Jeffrey','Beverly','Harris',61608.9,'Assistant','Ecology Lab','jeffreyharris@example.com',9204863175),(7899965550,'Alfred','Ashley','Rich',26729.5,'Assistant','Engineering Lab','alfredrich@example.com',7405892163),(8131565968,'Darren','Monica','Wood',86926.5,'Assistant','Genetics Lab','darrenwood@example.com',4287153906),(8312679106,'Valerie',NULL,'Campbell',82089.9,'Technician','Geology Lab','valeriecampbell@example.com',5032879156),(8316560268,'Mark','John','Massey',47994.8,'Assistant','Microbiology Lab','markmassey@example.com',6724308519),(8330369631,'Anthony','Jennifer','Hunt',59386.9,'Assistant','Neuroscience Lab','anthonyhunt@example.com',8392075164),(8609786590,'Mark','Janet','Mack',75635.4,'Researcher','Physics Lab','markmack@example.com',9204863175),(8713928981,'Elizabeth',NULL,'Hudson',64752.8,'Technician','Psychology Lab','elizabethhudson@example.com',7405892163),(8845436757,'Shane',NULL,'Morgan',82182.2,'Assistant','Zoology Lab','shanemorgan@example.com',4287153906),(8998327608,'Daniel',NULL,'Lee',46611.4,'Technician','Anatomy Lab','daniellee@example.com',5032879156),(9027632972,'Heather','Cynthia','Diaz',65745.7,'Researcher','Biochemistry Lab','heatherdiaz@example.com',6724308519),(9692617867,'Christopher','Jared','Moore',82079.7,'Researcher','Biology Lab','christophermoore@example.com',8392075164),(9926702178,'Melissa','Kelli','Ali',49754.2,'Researcher','Botany Lab','melissaali@example.com',9204863175),(9968444979,'Joel','Thomas','Zamora',95749.9,'Researcher','Chemistry Lab','joelzamora@example.com',7405892163);
+-- /*!40000 ALTER TABLE `staff` ENABLE KEYS */;
+-- UNLOCK TABLES;
+
 LOCK TABLES `staff` WRITE;
 /*!40000 ALTER TABLE `staff` DISABLE KEYS */;
-INSERT INTO `staff` VALUES (1090324586,'Antonio','Candice','Fritz',21076.4,'Assistant','Anatomy Lab','antoniofritz@example.com',7513498620),(1175259019,'Larry',NULL,'Clark',48988.8,'Researcher','Biochemistry Lab','larryclark@example.com',2385167904),(1357028218,'Cody',NULL,'Lopez',38466.9,'Assistant','Biology Lab','codylopez@example.com',6975814320),(1396986120,'Jessica',NULL,'Frost',71804.4,'Researcher','Botany Lab','jessicafrost@example.com',4297681053),(2252282535,'Christine','Zachary','Baker',89152.1,'Technician','Chemistry Lab','christinebaker@example.com',5196274308),(2764247410,'Alex','Michael','Bailey',99937.1,'Technician','Computer Lab','alexbailey@example.com',6739051842),(2853892818,'Stephen','Karen','Chase',69513,'Assistant','Ecology Lab','stephenchase@example.com',8156497023),(3170365953,'David',NULL,'Mcgee',21578.4,'Assistant','Engineering Lab','davidmcgee@example.com',9205361784),(3406445670,'Jamie',NULL,'Pierce',86842.4,'Researcher','Genetics Lab','jamiepierce@example.com',4287951360),(3450567856,'Philip',NULL,'Smith',31348.6,'Technician','Geology Lab','philipsmith@example.com',6921480753),(3630159773,'Linda',NULL,'Robinson',22609.8,'Researcher','Microbiology Lab','lindarobinson@example.com',5309618472),(3762979011,'Edwin','John','Howard',25057.7,'Technician','Neuroscience Lab','edwinhoward@example.com',7405829613),(3944593488,'Lori','Susan','Erickson',79620.4,'Assistant','Physics Lab','lorierickson@example.com',8129034765),(3986993428,'Wendy',NULL,'Robbins',71580.8,'Researcher','Psychology Lab','wendyrobbins@example.com',3964872051),(3988871171,'Ethan',NULL,'Velasquez',52002.9,'Researcher','Zoology Lab','ethanvelasquez@example.com',5049286137),(4282973843,'Charles',NULL,'Sullivan',71086.1,'Researcher','Anatomy Lab','charlessullivan@example.com',6804529713),(4549854248,'Shawn','Robert','Dunn',89957.3,'Assistant','Biochemistry Lab','shawndunn@example.com',3289651740),(4689717527,'Sara',NULL,'Davis',21342.6,'Assistant','Biology Lab','saradavis@example.com',7205483169),(4949907660,'Robert','Anna','Conley',33290.6,'Researcher','Botany Lab','robertconley@example.com',5184976230),(4997647942,'Justin','Peter','Anderson',96318.4,'Assistant','Chemistry Lab','justinanderson@example.com',9205481673),(5007077667,'Miguel',NULL,'Willis',74525.5,'Researcher','Computer Lab','miguelwillis@example.com',4637819205),(5152950840,'Bonnie','Shawn','Moore',21762.4,'Assistant','Ecology Lab','bonniemoore@example.com',5291876403),(5347013098,'Peter',NULL,'Fleming',59585.1,'Technician','Engineering Lab','peterfleming@example.com',6129408753),(5633355197,'Kevin','Joann','Delacruz',32613.2,'Assistant','Genetics Lab','kevindelacruz@example.com',8392075164),(5788369594,'Gregory',NULL,'Arroyo',67534.6,'Technician','Geology Lab','gregoryarroyo@example.com',9204863175),(5885455588,'Maria',NULL,'Lee',69550.2,'Technician','Microbiology Lab','marialee@example.com',7405892163),(5906677826,'Renee',NULL,'Roy',31086.6,'Assistant','Neuroscience Lab','reneeroy@example.com',4287153906),(5973489830,'Cassandra',NULL,'Rogers',95889.6,'Technician','Physics Lab','cassandrarogers@example.com',5032879156),(5996936127,'Amanda','Melinda','Pena',21838,'Researcher','Psychology Lab','amandapena@example.com',6724308519),(6310327206,'Vickie','Karen','Heath',61088.9,'Assistant','Zoology Lab','vickieheath@example.com',8392075164),(6384582630,'Ronald',NULL,'Mullins',35882.6,'Technician','Anatomy Lab','ronaldmullins@example.com',9204863175),(6534788396,'Jennifer',NULL,'Nguyen',90618,'Researcher','Biochemistry Lab','jennifernguyen@example.com',7405892163),(6678224530,'Arthur','Benjamin','Solis',72135.4,'Assistant','Biology Lab','arthursolis@example.com',4287153906),(6740036722,'Carrie','Lisa','Young',36937.2,'Assistant','Botany Lab','carrieyoung@example.com',5032879156),(6995308646,'Michael',NULL,'Alexander',38721.5,'Researcher','Chemistry Lab','michaelalexander@example.com',6724308519),(7053229337,'Daniel',NULL,'Henderson',88265.2,'Researcher','Computer Lab','danielhenderson@example.com',8392075164),(7688260504,'Jeffrey','Beverly','Harris',61608.9,'Assistant','Ecology Lab','jeffreyharris@example.com',9204863175),(7899965550,'Alfred','Ashley','Rich',26729.5,'Assistant','Engineering Lab','alfredrich@example.com',7405892163),(8131565968,'Darren','Monica','Wood',86926.5,'Assistant','Genetics Lab','darrenwood@example.com',4287153906),(8312679106,'Valerie',NULL,'Campbell',82089.9,'Technician','Geology Lab','valeriecampbell@example.com',5032879156),(8316560268,'Mark','John','Massey',47994.8,'Assistant','Microbiology Lab','markmassey@example.com',6724308519),(8330369631,'Anthony','Jennifer','Hunt',59386.9,'Assistant','Neuroscience Lab','anthonyhunt@example.com',8392075164),(8609786590,'Mark','Janet','Mack',75635.4,'Researcher','Physics Lab','markmack@example.com',9204863175),(8713928981,'Elizabeth',NULL,'Hudson',64752.8,'Technician','Psychology Lab','elizabethhudson@example.com',7405892163),(8845436757,'Shane',NULL,'Morgan',82182.2,'Assistant','Zoology Lab','shanemorgan@example.com',4287153906),(8998327608,'Daniel',NULL,'Lee',46611.4,'Technician','Anatomy Lab','daniellee@example.com',5032879156),(9027632972,'Heather','Cynthia','Diaz',65745.7,'Researcher','Biochemistry Lab','heatherdiaz@example.com',6724308519),(9692617867,'Christopher','Jared','Moore',82079.7,'Researcher','Biology Lab','christophermoore@example.com',8392075164),(9926702178,'Melissa','Kelli','Ali',49754.2,'Researcher','Botany Lab','melissaali@example.com',9204863175),(9968444979,'Joel','Thomas','Zamora',95749.9,'Researcher','Chemistry Lab','joelzamora@example.com',7405892163);
+INSERT INTO `staff` VALUES (1090324586,'Antonio','Candice','Fritz',21076.4,'Assistant','Anatomy Lab','antoniofritz@example.com',7513498620, 'https://drive.google.com/file/d/19uY3X76bigNjiPrmo-qrM6UUFvoXbNCc/view?usp=sharing', 'man wearing proffessional attire _ img1'),
+(1175259019,'Larry',NULL,'Clark',48988.8,'Researcher','Biochemistry Lab','larryclark@example.com',2385167904, 'https://drive.google.com/file/d/1UVrg23vtXXhAelbIsNwhuPQ60PapMhlK/view?usp=sharing', 'man wearing proffessional attire _ img2'),
+(1357028218,'Cody',NULL,'Lopez',38466.9,'Assistant','Biology Lab','codylopez@example.com',6975814320, 'https://drive.google.com/file/d/1UCkE2pw8BxXX4HAkfJ6hvuPbd5Hff7ww/view?usp=sharing', 'man wearing proffessional attire _ img3'),
+(1396986120,'Jessica',NULL,'Frost',71804.4,'Researcher','Botany Lab','jessicafrost@example.com',4297681053, 'https://drive.google.com/file/d/1rck0DeK398QA4zGW1cJANB5aupO1U0Qp/view?usp=sharing', 'man wearing proffessional attire _ img4'),
+(2252282535,'Christine','Zachary','Baker',89152.1,'Technician','Chemistry Lab','christinebaker@example.com',5196274308, 'https://drive.google.com/file/d/1qQpAW66UNuu-x055erICljNhcpEzdMjA/view?usp=sharing', 'man wearing proffessional attire _ img5'),
+(2764247410,'Alex','Michael','Bailey',99937.1,'Technician','Computer Lab','alexbailey@example.com',6739051842, 'https://drive.google.com/file/d/1DpLj3E6gvIN2YPKaA7yDx1ius5tiCXHd/view?usp=sharing', 'man wearing proffessional attire _ img6'),
+(2853892818,'Stephen','Karen','Chase',69513,'Assistant','Ecology Lab','stephenchase@example.com',8156497023, 'https://drive.google.com/file/d/19uY3X76bigNjiPrmo-qrM6UUFvoXbNCc/view?usp=sharing', 'man wearing proffessional attire _ img1'),
+(3170365953,'David',NULL,'Mcgee',21578.4,'Assistant','Engineering Lab','davidmcgee@example.com',9205361784, 'https://drive.google.com/file/d/1UVrg23vtXXhAelbIsNwhuPQ60PapMhlK/view?usp=sharing', 'man wearing proffessional attire _ img2'),
+(3406445670,'Jamie',NULL,'Pierce',86842.4,'Researcher','Genetics Lab','jamiepierce@example.com',4287951360, 'https://drive.google.com/file/d/1UCkE2pw8BxXX4HAkfJ6hvuPbd5Hff7ww/view?usp=sharing', 'man wearing proffessional attire _ img3'),
+(3450567856,'Philip',NULL,'Smith',31348.6,'Technician','Geology Lab','philipsmith@example.com',6921480753, 'https://drive.google.com/file/d/1rck0DeK398QA4zGW1cJANB5aupO1U0Qp/view?usp=sharing', 'man wearing proffessional attire _ img4'),
+(3630159773,'Linda',NULL,'Robinson',22609.8,'Researcher','Microbiology Lab','lindarobinson@example.com',5309618472, 'https://drive.google.com/file/d/1DpLj3E6gvIN2YPKaA7yDx1ius5tiCXHd/view?usp=sharing', 'man wearing proffessional attire _ img6'),
+(3762979011,'Edwin','John','Howard',25057.7,'Technician','Neuroscience Lab','edwinhoward@example.com',7405829613, 'https://drive.google.com/file/d/1rck0DeK398QA4zGW1cJANB5aupO1U0Qp/view?usp=sharing', 'man wearing proffessional attire _ img4'),
+(3944593488,'Lori','Susan','Erickson',79620.4,'Assistant','Physics Lab','lorierickson@example.com',8129034765, 'https://drive.google.com/file/d/1qQpAW66UNuu-x055erICljNhcpEzdMjA/view?usp=sharing', 'man wearing proffessional attire _ img5'),
+(3986993428,'Wendy',NULL,'Robbins',71580.8,'Researcher','Psychology Lab','wendyrobbins@example.com',3964872051, 'https://drive.google.com/file/d/1UVrg23vtXXhAelbIsNwhuPQ60PapMhlK/view?usp=sharing', 'man wearing proffessional attire _ img2'),
+(3988871171,'Ethan',NULL,'Velasquez',52002.9,'Researcher','Zoology Lab','ethanvelasquez@example.com',5049286137, 'https://drive.google.com/file/d/1rck0DeK398QA4zGW1cJANB5aupO1U0Qp/view?usp=sharing', 'man wearing proffessional attire _ img4'),
+(4282973843,'Charles',NULL,'Sullivan',71086.1,'Researcher','Anatomy Lab','charlessullivan@example.com',6804529713, 'https://drive.google.com/file/d/1UVrg23vtXXhAelbIsNwhuPQ60PapMhlK/view?usp=sharing', 'man wearing proffessional attire _ img2'),
+(4549854248,'Shawn','Robert','Dunn',89957.3,'Assistant','Biochemistry Lab','shawndunn@example.com',3289651740, 'https://drive.google.com/file/d/1UCkE2pw8BxXX4HAkfJ6hvuPbd5Hff7ww/view?usp=sharing', 'man wearing proffessional attire _ img3'),
+(4689717527,'Sara',NULL,'Davis',21342.6,'Assistant','Biology Lab','saradavis@example.com',7205483169, 'https://drive.google.com/file/d/19uY3X76bigNjiPrmo-qrM6UUFvoXbNCc/view?usp=sharing', 'man wearing proffessional attire _ img1'),
+(4949907660,'Robert','Anna','Conley',33290.6,'Researcher','Botany Lab','robertconley@example.com',5184976230, 'https://drive.google.com/file/d/1UCkE2pw8BxXX4HAkfJ6hvuPbd5Hff7ww/view?usp=sharing', 'man wearing proffessional attire _ img3'),
+(4997647942,'Justin','Peter','Anderson',96318.4,'Assistant','Chemistry Lab','justinanderson@example.com',9205481673, 'https://drive.google.com/file/d/1DpLj3E6gvIN2YPKaA7yDx1ius5tiCXHd/view?usp=sharing', 'man wearing proffessional attire _ img6'),
+(5007077667,'Miguel',NULL,'Willis',74525.5,'Researcher','Computer Lab','miguelwillis@example.com',4637819205, 'https://drive.google.com/file/d/19uY3X76bigNjiPrmo-qrM6UUFvoXbNCc/view?usp=sharing', 'man wearing proffessional attire _ img1'),
+(5152950840,'Bonnie','Shawn','Moore',21762.4,'Assistant','Ecology Lab','bonniemoore@example.com',5291876403, 'https://drive.google.com/file/d/1UVrg23vtXXhAelbIsNwhuPQ60PapMhlK/view?usp=sharing', 'man wearing proffessional attire _ img2'),
+(5347013098,'Peter',NULL,'Fleming',59585.1,'Technician','Engineering Lab','peterfleming@example.com',6129408753, 'https://drive.google.com/file/d/19uY3X76bigNjiPrmo-qrM6UUFvoXbNCc/view?usp=sharing', 'man wearing proffessional attire _ img1'),
+(5633355197,'Kevin','Joann','Delacruz',32613.2,'Assistant','Genetics Lab','kevindelacruz@example.com',8392075164, 'https://drive.google.com/file/d/1rck0DeK398QA4zGW1cJANB5aupO1U0Qp/view?usp=sharing', 'man wearing proffessional attire _ img4'),
+(5788369594,'Gregory',NULL,'Arroyo',67534.6,'Technician','Geology Lab','gregoryarroyo@example.com',9204863175, 'https://drive.google.com/file/d/1UCkE2pw8BxXX4HAkfJ6hvuPbd5Hff7ww/view?usp=sharing', 'man wearing proffessional attire _ img3'),
+(5885455588,'Maria',NULL,'Lee',69550.2,'Technician','Microbiology Lab','marialee@example.com',7405892163, 'https://drive.google.com/file/d/19uY3X76bigNjiPrmo-qrM6UUFvoXbNCc/view?usp=sharing', 'man wearing proffessional attire _ img1'),
+(5906677826,'Renee',NULL,'Roy',31086.6,'Assistant','Neuroscience Lab','reneeroy@example.com',4287153906, 'https://drive.google.com/file/d/1DpLj3E6gvIN2YPKaA7yDx1ius5tiCXHd/view?usp=sharing', 'man wearing proffessional attire _ img6'),
+(5973489830,'Cassandra',NULL,'Rogers',95889.6,'Technician','Physics Lab','cassandrarogers@example.com',5032879156, 'https://drive.google.com/file/d/1UCkE2pw8BxXX4HAkfJ6hvuPbd5Hff7ww/view?usp=sharing', 'man wearing proffessional attire _ img3'),
+(5996936127,'Amanda','Melinda','Pena',21838,'Researcher','Psychology Lab','amandapena@example.com',6724308519, 'https://drive.google.com/file/d/1UCkE2pw8BxXX4HAkfJ6hvuPbd5Hff7ww/view?usp=sharing', 'man wearing proffessional attire _ img3'),
+(6310327206,'Vickie','Karen','Heath',61088.9,'Assistant','Zoology Lab','vickieheath@example.com',8392075164, 'https://drive.google.com/file/d/1UVrg23vtXXhAelbIsNwhuPQ60PapMhlK/view?usp=sharing', 'man wearing proffessional attire _ img2'),
+(6384582630,'Ronald',NULL,'Mullins',35882.6,'Technician','Anatomy Lab','ronaldmullins@example.com',9204863175, 'https://drive.google.com/file/d/1rck0DeK398QA4zGW1cJANB5aupO1U0Qp/view?usp=sharing', 'man wearing proffessional attire _ img4'),
+(6534788396,'Jennifer',NULL,'Nguyen',90618,'Researcher','Biochemistry Lab','jennifernguyen@example.com',7405892163, 'https://drive.google.com/file/d/1DpLj3E6gvIN2YPKaA7yDx1ius5tiCXHd/view?usp=sharing', 'man wearing proffessional attire _ img6'),
+(6678224530,'Arthur','Benjamin','Solis',72135.4,'Assistant','Biology Lab','arthursolis@example.com',4287153906, 'https://drive.google.com/file/d/1rck0DeK398QA4zGW1cJANB5aupO1U0Qp/view?usp=sharing', 'man wearing proffessional attire _ img4'),
+(6740036722,'Carrie','Lisa','Young',36937.2,'Assistant','Botany Lab','carrieyoung@example.com',5032879156, 'https://drive.google.com/file/d/1rck0DeK398QA4zGW1cJANB5aupO1U0Qp/view?usp=sharing', 'man wearing proffessional attire _ img4'),
+(6995308646,'Michael',NULL,'Alexander',38721.5,'Researcher','Chemistry Lab','michaelalexander@example.com',6724308519, 'https://drive.google.com/file/d/1UVrg23vtXXhAelbIsNwhuPQ60PapMhlK/view?usp=sharing', 'man wearing proffessional attire _ img2'),
+(7053229337,'Daniel',NULL,'Henderson',88265.2,'Researcher','Computer Lab','danielhenderson@example.com',8392075164, 'https://drive.google.com/file/d/1rck0DeK398QA4zGW1cJANB5aupO1U0Qp/view?usp=sharing', 'man wearing proffessional attire _ img4'),
+(7688260504,'Jeffrey','Beverly','Harris',61608.9,'Assistant','Ecology Lab','jeffreyharris@example.com',9204863175, 'https://drive.google.com/file/d/1UCkE2pw8BxXX4HAkfJ6hvuPbd5Hff7ww/view?usp=sharing', 'man wearing proffessional attire _ img3'),
+(7899965550,'Alfred','Ashley','Rich',26729.5,'Assistant','Engineering Lab','alfredrich@example.com',7405892163, 'https://drive.google.com/file/d/1UVrg23vtXXhAelbIsNwhuPQ60PapMhlK/view?usp=sharing', 'man wearing proffessional attire _ img2'),
+(8131565968,'Darren','Monica','Wood',86926.5,'Assistant','Genetics Lab','darrenwood@example.com',4287153906, 'https://drive.google.com/file/d/1UCkE2pw8BxXX4HAkfJ6hvuPbd5Hff7ww/view?usp=sharing', 'man wearing proffessional attire _ img3'),
+(8312679106,'Valerie',NULL,'Campbell',82089.9,'Technician','Geology Lab','valeriecampbell@example.com',5032879156, 'https://drive.google.com/file/d/1qQpAW66UNuu-x055erICljNhcpEzdMjA/view?usp=sharing', 'man wearing proffessional attire _ img5'),
+(8316560268,'Mark','John','Massey',47994.8,'Assistant','Microbiology Lab','markmassey@example.com',6724308519, 'https://drive.google.com/file/d/1DpLj3E6gvIN2YPKaA7yDx1ius5tiCXHd/view?usp=sharing', 'man wearing proffessional attire _ img6'),
+(8330369631,'Anthony','Jennifer','Hunt',59386.9,'Assistant','Neuroscience Lab','anthonyhunt@example.com',8392075164, 'https://drive.google.com/file/d/1UCkE2pw8BxXX4HAkfJ6hvuPbd5Hff7ww/view?usp=sharing', 'man wearing proffessional attire _ img3'),
+(8609786590,'Mark','Janet','Mack',75635.4,'Researcher','Physics Lab','markmack@example.com',9204863175, 'https://drive.google.com/file/d/1UCkE2pw8BxXX4HAkfJ6hvuPbd5Hff7ww/view?usp=sharing', 'man wearing proffessional attire _ img3'),
+(8713928981,'Elizabeth',NULL,'Hudson',64752.8,'Technician','Psychology Lab','elizabethhudson@example.com',7405892163, 'https://drive.google.com/file/d/1UVrg23vtXXhAelbIsNwhuPQ60PapMhlK/view?usp=sharing', 'man wearing proffessional attire _ img2'),
+(8845436757,'Shane',NULL,'Morgan',82182.2,'Assistant','Zoology Lab','shanemorgan@example.com',4287153906, 'https://drive.google.com/file/d/1UVrg23vtXXhAelbIsNwhuPQ60PapMhlK/view?usp=sharing', 'man wearing proffessional attire _ img2'),
+(8998327608,'Daniel',NULL,'Lee',46611.4,'Technician','Anatomy Lab','daniellee@example.com',5032879156, 'https://drive.google.com/file/d/19uY3X76bigNjiPrmo-qrM6UUFvoXbNCc/view?usp=sharing', 'man wearing proffessional attire _ img1'),
+(9027632972,'Heather','Cynthia','Diaz',65745.7,'Researcher','Biochemistry Lab','heatherdiaz@example.com',6724308519, 'https://drive.google.com/file/d/1UVrg23vtXXhAelbIsNwhuPQ60PapMhlK/view?usp=sharing', 'man wearing proffessional attire _ img2'),
+(9692617867,'Christopher','Jared','Moore',82079.7,'Researcher','Biology Lab','christophermoore@example.com',8392075164, 'https://drive.google.com/file/d/1UCkE2pw8BxXX4HAkfJ6hvuPbd5Hff7ww/view?usp=sharing', 'man wearing proffessional attire _ img3'),
+(9926702178,'Melissa','Kelli','Ali',49754.2,'Researcher','Botany Lab','melissaali@example.com',9204863175, 'https://drive.google.com/file/d/1rck0DeK398QA4zGW1cJANB5aupO1U0Qp/view?usp=sharing', 'man wearing proffessional attire _ img4'),
+(9968444979,'Joel','Thomas','Zamora',95749.9,'Researcher','Chemistry Lab','joelzamora@example.com',7405892163, 'https://drive.google.com/file/d/1DpLj3E6gvIN2YPKaA7yDx1ius5tiCXHd/view?usp=sharing', 'man wearing proffessional attire _ img6');
 /*!40000 ALTER TABLE `staff` ENABLE KEYS */;
 UNLOCK TABLES;
-
-select * from staff where First_Name='Melissa';
 
 --
 -- Table structure for table `student_enrolled`
@@ -638,16 +687,11 @@ INSERT INTO `students` VALUES (11637578,'Anthony',NULL,'Marquez',2017,'BTech',0,
 UNLOCK TABLES;
 
 
-INSERT INTO `students` VALUES (11637579,'Ameya',NULL,'Tajne',2021,'BTech',0,'Investigation','CSE','anthony.marquezgmail.com',1234567890);
-
-
 
 
 --
 -- Table structure for table `time_slot`
 --
-
-select * from students where Contact=2;
 
 DROP TABLE IF EXISTS `time_slot`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -677,10 +721,6 @@ CREATE TABLE CE as (select * from students where Dept_Name = 'CE');
 CREATE TABLE CL as (select * from students where Dept_Name = 'CL');
 CREATE TABLE MSE as (select * from students where Dept_Name = 'MSE');
 
-
-select p.salary from professor p
-where p.salary not in
-(select p2.salary from professor p2 cross join (select * from professor) d where p2.salary < d.salary );
 
 
 --
